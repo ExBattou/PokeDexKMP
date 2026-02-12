@@ -1,4 +1,6 @@
+Welcome to PokeDexKMP!
 This is a Kotlin Multiplatform project targeting Android, iOS, Desktop (JVM).
+The goal was to have a simple pokedex that worked seamlesly on Android and iOS, to have a real Baseline for a KMP app as react does with its starter app.
 
 * [/composeApp](./composeApp/src) is for code that will be shared across your Compose Multiplatform applications.
   It contains several subfolders:
