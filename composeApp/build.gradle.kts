@@ -55,6 +55,15 @@ kotlin {
                 //Coil
                 implementation("io.coil-kt.coil3:coil-compose:3.0.0-alpha06")
                 implementation("io.coil-kt.coil3:coil-network-ktor:3.0.0-alpha06")
+
+                // Navigation
+                implementation("cafe.adriel.voyager:voyager-navigator:1.0.0")
+                implementation("cafe.adriel.voyager:voyager-transitions:1.0.0")
+                implementation("cafe.adriel.voyager:voyager-screenmodel:1.0.0")
+                implementation("cafe.adriel.voyager:voyager-koin:1.0.0")
+
+                // Koin
+                implementation("io.insert-koin:koin-core:3.5.3")
             }
         }
         val androidMain by getting {
@@ -62,6 +71,13 @@ kotlin {
                 implementation(libs.compose.uiToolingPreview)
                 implementation(libs.androidx.activity.compose)
                 implementation("io.ktor:ktor-client-okhttp:2.3.7")
+                implementation("io.insert-koin:koin-android:3.5.3")
+
+                // CameraX
+                implementation("androidx.camera:camera-core:1.3.1")
+                implementation("androidx.camera:camera-camera2:1.3.1")
+                implementation("androidx.camera:camera-lifecycle:1.3.1")
+                implementation("androidx.camera:camera-view:1.3.1")
             }
         }
         val iosArm64Main by getting

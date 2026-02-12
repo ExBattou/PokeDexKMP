@@ -1,6 +1,5 @@
 package net.adriannarduccipokedexkmp
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -11,10 +10,13 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.currentOrThrow
 import coil3.compose.AsyncImage // Para cargar imágenes
 
 @Composable
-fun PokedexApp(viewModel: PokemonViewModel = remember { PokemonViewModel() }) {
+fun PokedexApp(viewModel: PokemonViewModel) {
+    val navigator = LocalNavigator.currentOrThrow
     // Esto se ejecuta solo una vez cuando se compone la pantalla
     LaunchedEffect(Unit) {
         viewModel.loadPokemonList()
@@ -27,7 +29,11 @@ fun PokedexApp(viewModel: PokemonViewModel = remember { PokemonViewModel() }) {
         LazyColumn(modifier = Modifier.padding(padding)) {
             items(pokemonList) { pokemon ->
                 PokemonListItem(pokemon, imageLoader) {
-                    viewModel.loadDetails(pokemon.name)
+                    if (pokemon.name.lowercase() == "squirtle") {
+                        navigator.push(CameraScreen)
+                    } else {
+                        viewModel.loadDetails(pokemon.name)
+                    }
                 }
             }
         }

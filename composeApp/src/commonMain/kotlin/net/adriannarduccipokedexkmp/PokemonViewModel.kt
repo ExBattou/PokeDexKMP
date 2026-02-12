@@ -1,9 +1,11 @@
 package net.adriannarduccipokedexkmp
 
+import cafe.adriel.voyager.core.model.ScreenModel
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -11,12 +13,13 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 
-class PokemonViewModel {
+class PokemonViewModel : ScreenModel {
     private val repository = PokemonRepository()
     private val handler = CoroutineExceptionHandler { _, exception ->
         println("CoroutineExceptionHandler got $exception")
     }
-    private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main + handler)
+
+    private val viewModelScope = CoroutineScope(Dispatchers.Main.immediate + SupervisorJob())
 
     private val _pokemonList = MutableStateFlow<List<PokemonItem>>(emptyList())
     val pokemonList: StateFlow<List<PokemonItem>> = _pokemonList.asStateFlow()
@@ -35,7 +38,7 @@ class PokemonViewModel {
     }
 
     fun loadPokemonList() {
-        scope.launch {
+        viewModelScope.launch(handler) {
             repository.getPokemonList().collectLatest { list ->
                 _pokemonList.value = list
             }
@@ -43,10 +46,14 @@ class PokemonViewModel {
     }
 
     fun loadDetails(name: String) {
-        scope.launch {
+        viewModelScope.launch(handler) {
             repository.getPokemonDetails(name).collectLatest { details ->
                 _selectedPokemon.value = details
             }
         }
+    }
+
+    override fun onDispose() {
+        viewModelScope.cancel()
     }
 }
