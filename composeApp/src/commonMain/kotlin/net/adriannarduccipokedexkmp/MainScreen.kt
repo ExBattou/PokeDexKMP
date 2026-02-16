@@ -15,7 +15,10 @@ import cafe.adriel.voyager.navigator.currentOrThrow
 import coil3.compose.AsyncImage // Para cargar imágenes
 
 @Composable
-fun PokedexApp(viewModel: PokemonViewModel) {
+fun PokedexApp(
+    viewModel: PokemonViewModel,
+    cameraView: @Composable (Modifier) -> Unit
+) {
     val navigator = LocalNavigator.currentOrThrow
     // Esto se ejecuta solo una vez cuando se compone la pantalla
     LaunchedEffect(Unit) {
@@ -30,7 +33,7 @@ fun PokedexApp(viewModel: PokemonViewModel) {
             items(pokemonList) { pokemon ->
                 PokemonListItem(pokemon, imageLoader) {
                     if (pokemon.name.lowercase() == "squirtle") {
-                        navigator.push(CameraScreen)
+                        navigator.push(CameraScreen(cameraView))
                     } else {
                         viewModel.loadDetails(pokemon.name)
                     }
